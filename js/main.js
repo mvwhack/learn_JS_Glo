@@ -5,35 +5,42 @@ let isNumber = function(n){
 };
 
 let money,
-    income = 'Разработка сайтов на фрилансе',
-    deposit = confirm('Есть ли у вас депозит в банке?'),
-    mission = 1000000,
-    period = 12;
-
-let start = function() {
-    do {
-        money = prompt('Ваш месячный доход?');
-    }
-    while(!isNumber(money));
+    start = function() {
+        do {
+            money = prompt('Ваш месячный доход?');
+        }
+        while(!isNumber(money));
 };
 start();
+
+let appData = {
+    income: {},
+    addIncome: [],
+    expenses: {},
+    addExpenses: [],
+    deposit: false,
+    mission: 1000000,
+    period: 12,
+    asking: function(){
+        let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
+            appData.addExpenses = addExpenses.toLowerCase().split(',');
+            appData.deposit = confirm('Есть ли у вас депозит в банке?');
+    }
+};
+
 
 // Функция получиает и выводит в консоль тип данных переданного в нее аргумента
 function showTypeOf(data){
     console.log(data, typeof(data));
 }
 showTypeOf(money);
-showTypeOf(income);
-showTypeOf(deposit);
+showTypeOf(appData.income);
+showTypeOf(appData.deposit);
 
-console.log('Цель заработать ' + mission + ' рублей');
-console.log('Период равен ' + period + ' месяцев');
+console.log('Цель заработать ' + appData.mission + ' рублей');
+console.log('Период равен ' + appData.period + ' месяцев');
 console.log('money: ', money);
-console.log('deposit: ', deposit);
-
-let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
-console.log('addExpenses: ', addExpenses.toLowerCase().split(','));
-
+console.log('deposit: ', appData.deposit);
 
 let expenses = [];
 
@@ -54,7 +61,6 @@ let getExpensesMonth = function(){
         sum += +check;
         
     }
-
     return sum;
 };
 
@@ -70,7 +76,7 @@ let accumulatedMonth = getAccumulatedMonth();
 
 // Функция считатет за какой переиод будет достигнута цель
 function getTargetMonth(){
-    return Math.ceil(mission / accumulatedMonth);
+    return Math.ceil(appData.mission / accumulatedMonth);
 }
 
 if (getTargetMonth() < 0){
