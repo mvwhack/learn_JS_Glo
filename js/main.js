@@ -1,10 +1,22 @@
 'use strict';
 
-let money = +prompt('Ваш месячный доход?', 50000),
+let isNumber = function(n){
+    return !isNaN(parseFloat(n)) && isFinite(n);
+};
+
+let money,
     income = 'Разработка сайтов на фрилансе',
     deposit = confirm('Есть ли у вас депозит в банке?'),
     mission = 1000000,
     period = 12;
+
+let start = function() {
+    do {
+        money = prompt('Ваш месячный доход?');
+    }
+    while(!isNumber(money));
+};
+start();
 
 // Функция получиает и выводит в консоль тип данных переданного в нее аргумента
 function showTypeOf(data){
@@ -20,26 +32,38 @@ console.log('money: ', money);
 console.log('deposit: ', deposit);
 
 let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
-console.log('addExpenses: ', addExpenses.split(', '));
+console.log('addExpenses: ', addExpenses.toLowerCase().split(','));
 
-let expenses1 = prompt('Введите обязательную статью расходов?'),
-    amount1 = +prompt('Во сколько это обойдется?');
-console.log('Обязательные расходы - ' + expenses1 + ':', amount1);
 
-let expenses2 = prompt('Введите обязательную статью расходов?'),
-    amount2 = +prompt('Во сколько это обойдется?');
-console.log('Обязательные расходы - ' + expenses2 + ':', amount2);
-
+let expenses = [];
 
 // Функция возвращает сумму обязательных расходов за месяц
-function getExpensesMonth(){
-    return amount1 + amount2;
-} 
-console.log('Сумма обязательных расходов равна: ' + getExpensesMonth());
+let getExpensesMonth = function(){
+    let sum = 0,
+        check;
+    
+    for (let i = 0; i < 2; i++){
+
+        expenses[i] = prompt('Введите обязательную статью расходов?');
+        
+        do {
+            check = prompt('Во сколько это обойдется?');
+        }
+        while(!isNumber(check) || check === '' || check === null);
+        
+        sum += +check;
+        
+    }
+
+    return sum;
+};
+
+let expensesAmount = getExpensesMonth();
+console.log('Сумма обязательных расходов равна: ' + expensesAmount);
 
 // Функция возвращает Накопления за месяц, доходы минус расходы
 function getAccumulatedMonth(){
-    return money - getExpensesMonth();
+    return money - expensesAmount;
 }
 console.log('Читсый доход равен: ' + getAccumulatedMonth());
 let accumulatedMonth = getAccumulatedMonth();
@@ -48,7 +72,12 @@ let accumulatedMonth = getAccumulatedMonth();
 function getTargetMonth(){
     return Math.ceil(mission / accumulatedMonth);
 }
-console.log('Цель будет достигнута за', getTargetMonth() + ' месяцев');
+
+if (getTargetMonth() < 0){
+    console.log('Цель не будет достигнута');
+} else {
+    console.log('Цель будет достигнута за', getTargetMonth() + ' месяцев');
+}
 
 
 let budgetDay = Math.floor((money - getTargetMonth()) / 30);
