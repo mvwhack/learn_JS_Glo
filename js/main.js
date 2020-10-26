@@ -20,26 +20,61 @@ let appData = {
     expenses: {},
     addExpenses: [],
     deposit: false,
+    percentDeposit: 0,
+    moneyDeposite: 0,
     mission: 1000000,
     period: 12,
     budgetDay: 0,
     budgetMonth: 0,
     expensesMonth: 0,
     asking: function(){
-        let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
-            appData.addExpenses = addExpenses.toLowerCase().split(',');
-            appData.deposit = confirm('Есть ли у вас депозит в банке?');
+
+        if(confirm('Есть ли у вас дополнительный источник зароботка?')){
+
+
+            let itemIncome;
+            do {
+                itemIncome = prompt('Какой у вас дополнительный зароботок?');
+            } 
+            while ( !isNaN( itemIncome ) || itemIncome === '' || itemIncome === null );
+            
+
+            let cashIncome;
+                do {
+                    cashIncome = +prompt('Сколько в месяц вы на этом зарабатываете?');
+                }
+                while(!isNumber(cashIncome));
+
+            appData.income[itemIncome] = cashIncome;
+        }
+
+        let addExpenses;
+            do {
+                addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
+                appData.addExpenses = addExpenses.toLowerCase().split(',');
+            } 
+            while ( !isNaN( addExpenses ) || addExpenses === '' || addExpenses === null );
+        
+        // Задаем вопрос о наличии депозита.
+        appData.deposit = confirm('Есть ли у вас депозит в банке?');
 
         // Возвращает сумму обязательных расходов.
         for (let i = 0; i < 2; i++) {
-            let expensesItem = prompt( 'Введите обязательную статью расходов?'),
-                expensesCost = +prompt( 'Во сколько это обойдется?');
 
-            if ( (typeof(expensesItem)) === 'string' && expensesItem !== null && expensesItem !== '' &&  expensesCost !== '' && expensesCost !== null ){
+            // Добавить сюда проверку!
+            let expensesItem;
+                do {
+                    expensesItem = prompt( 'Введите обязательную статью расходов?');
+                } 
+                while ( !isNaN( expensesItem ) || expensesItem === '' || expensesItem === null );
+                
+            let expensesCost;
+                do {
+                    expensesCost = +prompt( 'Во сколько это обойдется?');
+                } 
+                while(!isNumber(expensesCost));
+
                 appData.expenses[expensesItem] = expensesCost;
-            } else {
-                i = i - 1;
-            }
         }
     },
     // Функция считает сумму расходов
@@ -50,7 +85,7 @@ let appData = {
     },
     // Функция возвращает Накопления за месяц, доходы минус расходы
     getBudget: function(){
-        appData.budgetMonth = Math.floor(money - appData.budgetMonth);
+        appData.budgetMonth = Math.floor(money - appData.expensesMonth);
         appData.budgetDay = appData.budgetMonth / 30;
         return money - appData.expensesMonth;
     },
@@ -74,6 +109,19 @@ let appData = {
         } else if (appData.budgetDay <= 0){
             return('Что то пошло не так');
         }
+    },
+    getInfoDeposit: function(){
+        if(appData.deposit){
+
+            do{
+                appData.percentDeposit = +prompt('Какой годовой процент?');
+                appData.moneyDeposite = +prompt('Какая сумма размещена на депозите?');
+            }
+            while(!isNumber(appData.percentDeposit) || !isNumber(appData.moneyDeposite));
+        }
+    },
+    calcSavedMoney: function(){
+        return appData.budgetMonth * appData.period;
     }
 };
 
@@ -91,7 +139,14 @@ console.log('Ваш уровень дохода: ' + appData.getStatusIncome());
 for(let key in appData){
     console.log('Наша программа включает в себя данные: ' + key + appData[key]);
 }
+appData.getInfoDeposit();
 
 
-    
+for (let word of appData.addExpenses) {
+    word = word.trim();
+    word = word.charAt(0).toUpperCase() + word.slice(1);
+    console.log(word);
+}
+
+console.log(appData.percentDeposit, appData.moneyDeposite, appData.calcSavedMoney());
 
