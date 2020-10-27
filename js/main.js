@@ -1,5 +1,30 @@
 'use strict';
 
+let btnStart = document.getElementById('start'), // Кнопка рассчитать.
+    btnPlusIncome = document.getElementsByTagName('button')[0], // Кнопка добавления дополнительного дохода
+    btnPlusExpenses = document.getElementsByTagName('button')[1], // Кнопка добавления расходов
+    depositChekbox = document.querySelector( '#deposit-check' ), // Чекбокс депозита (Да или НЕТ)
+    addIncomeItem = document.querySelectorAll( '.additional_income-item' ), // Поля ввода возможных доходов
+    budgetMonthValue = document.getElementsByClassName( 'budget_month-value' )[0], // Доход за месяц
+    budgetDayValue = document.getElementsByClassName( 'budget_day-value' )[0], // Дневной бюджет
+    expensesMonthValue = document.getElementsByClassName( 'expenses_month-value' )[0], // Расход за месяц
+    addIncomeValue = document.getElementsByClassName( 'additional_income-value' )[0], // Возможные доходы
+    addExpensesValue = document.getElementsByClassName( 'additional_expenses-value' )[0], // Возможные расходы
+    incomePeriodValue = document.getElementsByClassName( 'income_period-value' )[0], // Накопления за период
+    targetMonthValue = document.getElementsByClassName( 'target_month-value' )[0], // Срок достижения цели в месяцах
+    salaryAmount = document.querySelector('.salary-amount'), // Вводим свой месячный доход
+    incomeTitle = document.querySelector( 'input.income-title' ), // Вводим наименование доп.дохода
+    incomeAmount = document.querySelector( '.income-amount' ), // Вводим ссуму доп.дохода
+    expensesTitle = document.querySelector( 'input.expenses-title' ), // Наименование обязательных расходов
+    expensesAmount = document.querySelector( '.expenses-amount' ), // Сумма обязательных расходов
+    addExpensesItem = document.querySelector( '.additional_expenses-item' ), // Возможные расходы, перечисление
+    targetAmount = document.querySelector( '.target-amount' ), // Цель, какую ссумму хотим накопить
+    selectPeriod = document.getElementsByClassName( 'period-select' )[0], // выбираем за какой период
+    depositInBank = document.getElementsByTagName( 'select' )[0], // Выбираем банк в котором депозит
+    depositAmount = document.getElementsByClassName( 'deposit-amount' )[0], //  Какая сумма размещена в банке
+    depositPercent = document.getElementsByClassName( 'deposit-percent' )[0]; // Под какой процент
+
+
 let isNumber = function(n){
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
