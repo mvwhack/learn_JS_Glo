@@ -4,7 +4,8 @@ let btnStart = document.getElementById('start'), // Кнопка рассчит�
     btnPlusIncome = document.getElementsByTagName('button')[0], // Кнопка добавления дополнительного дохода
     btnPlusExpenses = document.getElementsByTagName('button')[1], // Кнопка добавления расходов
     depositChekbox = document.querySelector( '#deposit-check' ), // Чекбокс депозита (Да или НЕТ)
-    addIncomeItem = document.querySelectorAll( '.additional_income-item' ), // Поля ввода возможных доходов
+    addIncomeItemOne = document.querySelectorAll( '.additional_income-item' )[0], // Первое поле ввода возможных доходов
+    addIncomeItemTwo = document.querySelectorAll( '.additional_income-item' )[1], // Второе поле ввода возможных доходов
     budgetMonthValue = document.getElementsByClassName( 'budget_month-value' )[0], // Доход за месяц
     budgetDayValue = document.getElementsByClassName( 'budget_day-value' )[0], // Дневной бюджет
     expensesMonthValue = document.getElementsByClassName( 'expenses_month-value' )[0], // Расход за месяц
@@ -25,7 +26,7 @@ let btnStart = document.getElementById('start'), // Кнопка рассчит�
     depositPercent = document.getElementsByClassName( 'deposit-percent' )[0]; // Под какой процент
 
 
-let isNumber = function(n){
+const isNumber = function(n){
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
@@ -38,7 +39,7 @@ let money,
 };
 start();
 
-let appData = {
+const appData = {
     budget: money,
     income: {},
     addIncome: [],
@@ -56,21 +57,18 @@ let appData = {
 
         if(confirm('Есть ли у вас дополнительный источник зароботка?')){
 
-
-            let itemIncome;
-            do {
-                itemIncome = prompt('Какой у вас дополнительный зароботок?');
-            } 
-            while ( !isNaN( itemIncome ) || itemIncome === '' || itemIncome === null );
-            
-
-            let cashIncome;
+            let itemIncome, cashIncome;
                 do {
-                    cashIncome = +prompt('Сколько в месяц вы на этом зарабатываете?');
+                    itemIncome = prompt('Какой у вас дополнительный зароботок?' , 'фриланс');
+                } 
+                while ( !isNaN( itemIncome ) || itemIncome === '' || itemIncome === null );
+                
+                do{
+                    cashIncome = prompt('Сколько в месяц вы на этом зарабатываете?');
                 }
-                while(!isNumber(cashIncome));
+                while( isNaN( cashIncome ) || cashIncome.trim() === '' || cashIncome === null);
 
-            appData.income[itemIncome] = cashIncome;
+            appData.income[itemIncome] = +cashIncome;
         }
 
         let addExpenses;
@@ -94,12 +92,12 @@ let appData = {
                 while ( !isNaN( expensesItem ) || expensesItem === '' || expensesItem === null );
                 
             let expensesCost;
-                do {
-                    expensesCost = +prompt( 'Во сколько это обойдется?');
-                } 
-                while(!isNumber(expensesCost));
+                do{
+                    expensesCost = prompt( 'Во сколько это обойдется?');
+                }
+                while( isNaN( expensesCost ) || expensesCost.trim() === '' || expensesCost === null);
 
-                appData.expenses[expensesItem] = expensesCost;
+            appData.expenses[expensesItem] = +expensesCost;
         }
     },
     // Функция считает сумму расходов
@@ -139,8 +137,8 @@ let appData = {
         if(appData.deposit){
 
             do{
-                appData.percentDeposit = +prompt('Какой годовой процент?');
-                appData.moneyDeposite = +prompt('Какая сумма размещена на депозите?');
+                appData.percentDeposit = prompt('Какой годовой процент?');
+                appData.moneyDeposite = prompt('Какая сумма размещена на депозите?');
             }
             while(!isNumber(appData.percentDeposit) || !isNumber(appData.moneyDeposite));
         }
