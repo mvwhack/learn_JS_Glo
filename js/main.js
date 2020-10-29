@@ -1,6 +1,6 @@
 'use strict';
 
-let isNumber = function(n){
+const isNumber = function(n){
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
@@ -13,7 +13,7 @@ let money,
 };
 start();
 
-let appData = {
+const appData = {
     budget: money,
     income: {},
     addIncome: [],
@@ -31,21 +31,18 @@ let appData = {
 
         if(confirm('Есть ли у вас дополнительный источник зароботка?')){
 
-
-            let itemIncome;
-            do {
-                itemIncome = prompt('Какой у вас дополнительный зароботок?');
-            } 
-            while ( !isNaN( itemIncome ) || itemIncome === '' || itemIncome === null );
-            
-
-            let cashIncome;
+            let itemIncome, cashIncome;
                 do {
-                    cashIncome = +prompt('Сколько в месяц вы на этом зарабатываете?');
+                    itemIncome = prompt('Какой у вас дополнительный зароботок?' , 'фриланс');
+                } 
+                while ( !isNaN( itemIncome ) || itemIncome === '' || itemIncome === null );
+                
+                do{
+                    cashIncome = prompt('Сколько в месяц вы на этом зарабатываете?');
                 }
-                while(!isNumber(cashIncome));
+                while( isNaN( cashIncome ) || cashIncome.trim() === '' || cashIncome === null);
 
-            appData.income[itemIncome] = cashIncome;
+            appData.income[itemIncome] = +cashIncome;
         }
 
         let addExpenses;
@@ -69,12 +66,12 @@ let appData = {
                 while ( !isNaN( expensesItem ) || expensesItem === '' || expensesItem === null );
                 
             let expensesCost;
-                do {
-                    expensesCost = +prompt( 'Во сколько это обойдется?');
-                } 
-                while(!isNumber(expensesCost));
+                do{
+                    expensesCost = prompt( 'Во сколько это обойдется?');
+                }
+                while( isNaN( expensesCost ) || expensesCost.trim() === '' || expensesCost === null);
 
-                appData.expenses[expensesItem] = expensesCost;
+            appData.expenses[expensesItem] = +expensesCost;
         }
     },
     // Функция считает сумму расходов
@@ -114,8 +111,8 @@ let appData = {
         if(appData.deposit){
 
             do{
-                appData.percentDeposit = +prompt('Какой годовой процент?');
-                appData.moneyDeposite = +prompt('Какая сумма размещена на депозите?');
+                appData.percentDeposit = prompt('Какой годовой процент?');
+                appData.moneyDeposite = prompt('Какая сумма размещена на депозите?');
             }
             while(!isNumber(appData.percentDeposit) || !isNumber(appData.moneyDeposite));
         }
